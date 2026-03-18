@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>Admin</h2>
+
+<a href="#" onclick="showSection('create')">Create Event</a>
+<a href="#" onclick="showSection('events')">All Events</a>
+<a href="#" onclick="showSection('registrations')">Registrations</a>
+<a href="#" onclick="showSection('scanner')">QR Scanner</a>
+
+<button onclick="startAI()">🎤 Ask AI</button>
+<br> <br>
+
+<button onclick="logout()">🚪 Logout</button>
+
+</div>
+
+<div class="main">
+
+<!-- CREATE EVENT -->
+
+<section id="createSection">
+
+<h1>Create Event</h1>
+
+<input id="title" placeholder="Event Title">
+<input id="desc" placeholder="Description">
+<input id="date" type="date">
+<input id="fee" placeholder="Fee">
+<input type="file" id="image">
+
+<button id="createBtn">Create Event</button>
+
+</section>
+
+<!-- QR SCANNER (FIXED ID) -->
+
+<section id="scannerSection" style="display:none">
+
+<h2>Scan QR</h2>
+
+<div id="reader" style="width:300px"></div>
+<button onclick="startScanner()">Start Scanner</button>
+
+<div id="scanResult"></div>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+</section>
+
+<!-- ALL EVENTS -->
+
+<section id="eventsSection" style="display:none">
+
+<h2>All Events</h2>
+
+<div id="eventsList" class="event-grid"></div>
+
+</section>
+
+<!-- AI ASSISTANT -->
+<div class="ai-box">
+
+<div id="chatBox"></div>
+
+<input id="aiInput" placeholder="Ask AI...">
+<button onclick="sendAI()">Send</button>
+<button onclick="startVoice()">🎤</button>
+
+</div>
+
+<!-- REGISTRATIONS -->
+
+<section id="registrationsSection" style="display:none">
+
+<h2>Pending Registrations</h2>
+
+<div id="registrations" class="event-grid"></div>
+
+</section>
+
+</div>
+
+<script src="js/script.js"></script>
+
+<script>
+/* DEFAULT LOAD */
+window.onload = function(){
+showSection('create');
+}
+
+/* LOGOUT */
+function logout(){
+localStorage.clear();
+window.location = "login.html";
+}
+</script>
+
+</body>
+</html>

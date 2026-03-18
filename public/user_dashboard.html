@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+<h2>EventHub</h2>
+<div>
+<a href="#">Dashboard</a>
+<button onclick="logout()">Logout</button>
+</div>
+</nav>
+
+<!-- MY REGISTRATIONS -->
+
+<h2 style="text-align:center">My Registrations</h2>
+
+<div id="myEvents" class="event-grid"></div>
+
+<!-- AVAILABLE EVENTS -->
+
+<h1 style="text-align:center;margin-top:20px;">Available Events</h1>
+
+<div id="events" class="event-grid"></div>
+
+<!-- AI ASSISTANT -->
+<div class="ai-box">
+
+<div id="chatBox"></div>
+
+<input id="aiInput" placeholder="Ask AI...">
+<button onclick="sendAI()">Send</button>
+<button onclick="startVoice()">🎤</button>
+
+</div>
+
+<!-- REGISTRATION MODAL -->
+
+<div id="registerModal" class="modal">
+
+<div class="modal-content">
+
+<span class="close" onclick="closeModal()">&times;</span>
+
+<h2>Event Registration</h2>
+
+<!-- USER DETAILS -->
+<input id="studentName" placeholder="Name">
+<input id="department" placeholder="Department">
+<input id="regNumber" placeholder="Registration Number">
+<input id="studentEmail" placeholder="Email">
+<input id="year" placeholder="Year of Study">
+<input id="college" placeholder="College Name">
+
+<!-- 🔥 PAYMENT SECTION -->
+<h3>💳 Payment</h3>
+
+<p>Scan QR or pay via UPI</p>
+
+<img src="images/payment-qr.jpeg" width="200" style="margin:10px 0">
+
+<p><b>UPI ID:</b> yourname@upi</p>
+
+<!-- PAYMENT PROOF -->
+<input type="file" id="paymentProof">
+
+<button id="submitBtn">Submit Registration</button>
+
+</div>
+
+</div>
+
+<script src="js/script.js"></script>
+
+<script>
+
+/* LOGOUT FUNCTION */
+function logout(){
+localStorage.clear();
+window.location="login.html";
+}
+
+/* CLOSE MODAL ON OUTSIDE CLICK */
+window.onclick = function(event){
+const modal = document.getElementById("registerModal");
+if(event.target === modal){
+modal.style.display = "none";
+}
+};
+</script>
+
+</body>
+</html>
