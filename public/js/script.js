@@ -444,7 +444,7 @@ else{
 
 try{
 
-const res = await fetch("http://localhost:3000/ai",{
+const res = await fetch("/ai",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
