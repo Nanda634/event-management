@@ -4,27 +4,29 @@ let selectedEventId = null;
 
 /* ---------------- REGISTER USER ---------------- */
 
-async function register(){
+async function register(e) {
+  e.preventDefault(); // 🔥 VERY IMPORTANT
 
-const name=document.getElementById("name").value;
-const email=document.getElementById("email").value;
-const password=document.getElementById("password").value;
-const role=document.getElementById("role").value;
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-const res=await fetch("/register",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({name,email,password,role})
-});
+  try {
+    const res = await fetch("/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, email, password })
+    });
 
-const data=await res.text();
+    const data = await res.text();
+    alert(data);
 
-alert(data);
-
-window.location="login.html";
-
+  } catch (err) {
+    console.error("Fetch error:", err);
+  }
 }
-
 /* ---------------- LOGIN ---------------- */
 
 async function login(){

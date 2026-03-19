@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Register</title>
 <link rel="stylesheet" href="css/style.css">
@@ -22,7 +22,9 @@
   <option value="admin">Admin</option>
 </select>
 
-<button onclick="register()">Register</button>
+<form onsubmit="register(event)">
+  <button type="submit">Register</button>
+</form>
 
 </div>
 
