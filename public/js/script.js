@@ -1,31 +1,30 @@
-const API = "http://localhost:3000";
+const API = "https://event-management-production-d444.up.railway.app";
 
 let selectedEventId = null;
 
 /* ---------------- REGISTER USER ---------------- */
 
-async function register(e) {
-  e.preventDefault(); // 🔥 VERY IMPORTANT
+async function register(){
 
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+const name=document.getElementById("name").value;
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
+const role=document.getElementById("role").value;
 
-  try {
-    const res = await fetch("/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, email, password })
-    });
+const res=await fetch(API + "/register", {
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({name,email,password,role})
+});
 
-    const data = await res.text();
-    alert(data);
+const text = await res.text();
 
-  } catch (err) {
-    console.error("Fetch error:", err);
-  }
+alert(text);
+
+if(res.ok){
+window.location="login.html";
+}
+
 }
 /* ---------------- LOGIN ---------------- */
 
@@ -34,28 +33,47 @@ async function login(){
 const email = document.getElementById("email").value;
 const password = document.getElementById("password").value;
 
-const res = await fetch("/login",{
+try{
+
+const res = await fetch(API + "/login", {
 method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({email,password})
 });
 
-const data = await res.json();
+const text = await res.text();
 
-console.log("LOGIN:", data); // ✅ DEBUG
+console.log("LOGIN RESPONSE:", text);
 
-localStorage.setItem("token",data.token);
+/* 🔥 FIX JSON ERROR */
+let data;
 
+try{
+data = JSON.parse(text);
+}catch{
+alert(text); // shows error like "Wrong password"
+return;
+}
+
+localStorage.setItem("token", data.token);
+
+/* ✅ REDIRECTION FIX */
 if(data.role === "admin"){
 window.location.href = "admin_dashboard.html";
-}else if(data.role === "user"){
+}
+else if(data.role === "user"){
 window.location.href = "user_dashboard.html";
-}else{
-alert("Unknown role");
+}
+else{
+alert("Invalid role");
+}
+
+}catch(err){
+console.error(err);
+alert("Server error");
 }
 
 }
-
 /* ---------------- CREATE EVENT ---------------- */
 
 async function createEvent(){
@@ -371,29 +389,50 @@ ${e.payment_id ? `<img src="${e.payment_id}" width="150">` : ""}
 
 function startScanner(){
 
-if(typeof Html5Qrcode === "undefined"){
-alert("Scanner library not loaded");
+const reader = document.getElementById("reader");
+
+if(!reader){
+alert("Scanner UI not found");
 return;
 }
+
+if(!navigator.mediaDevices){
+alert("Camera not supported on this device");
+return;
+}
+/* clear previous scan */
+reader.innerHTML = "";
 
 const scanner = new Html5Qrcode("reader");
 
 scanner.start(
-{ facingMode: "environment" },
-{ fps:10, qrbox:250 },
-(decodedText)=>{
+{ facingMode: "environment" }, // back camera
+{
+fps: 10,
+qrbox: 250
+},
+async (decodedText) => {
 
-document.getElementById("scanResult").innerText = decodedText;
+document.getElementById("scanResult").innerText = "Scanned: " + decodedText;
 
-fetch(API + "/verify",{
-method:"POST",
+/* stop scanner after success */
+await scanner.stop();
+
+/* send to backend */
+fetch(API + "/verify", {
+method: "POST",
 headers:{
 "Content-Type":"application/json",
-Authorization:localStorage.getItem("token")
+Authorization: localStorage.getItem("token")
 },
-body:JSON.stringify({data:decodedText})
+body: JSON.stringify({ data: decodedText })
 });
 
+alert("Attendance Marked");
+
+},
+(error) => {
+console.log("Scan error:", error);
 }
 );
 
